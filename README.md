@@ -1,6 +1,6 @@
 # Builder scripts
 
-Scripts necessary for the server build to work. They also provide the ability to run a semi-automatic build
+Scripts necessary for the server build to work. They also provide the ability to run a semi-automatic build by clicking Builds/🕸Build WebGL button
 
 # Installation
 
