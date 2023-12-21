@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Globalization;
 using UnityEditor;
@@ -18,13 +19,24 @@ namespace BuilderScript.Editor
             var now = DateTime.Now;
             var culture = new CultureInfo("ru-RU");
     
-            var location = $"{now.ToString("dd.MM.yyyy", culture)}_{PlayerSettings.productName}_{now.ToString("hh.mm", culture)}";
+            var buildFolderName = $"{now.ToString("dd.MM.yyyy", culture)}_{PlayerSettings.productName}_{now.ToString("hh.mm", culture)}";
+            
+
             BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
-                locationPathName = $"../../artifacts/{location}",
+                locationPathName = $"{GetArtifactsFolderLocation()}/{buildFolderName}",
                 scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray(),
                 target = Platform
             });
+        }
+
+        private static string GetArtifactsFolderLocation()
+        {
+            if(Directory.Exists("../../src"))
+            {
+                return "../../artifacts";
+            }
+            return "../artifacts";
         }
 
         private static void PredefinePlatformSpecificSettings(BuildTarget target)
