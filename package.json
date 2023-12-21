@@ -1,6 +1,6 @@
 {
   "name": "com.immortalsgames.builderscripts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Builder Scripts",
   "type": "library",
   "description": "Scripts necessary for the server build to work. They also provide the ability to run a semi-automatic build",

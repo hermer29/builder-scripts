@@ -1,4 +1,4 @@
-namespace Editor
+namespace BuilderScripts.Editor
 {
     public static class BuilderConsts
     {
