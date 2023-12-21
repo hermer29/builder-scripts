@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using static UnityEditor.BuildTarget;
 
-namespace BuilderScripts.Editor
+namespace BuilderScript.Editor
 {
     public static class Builder
     {
