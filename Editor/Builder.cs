@@ -30,6 +30,26 @@ namespace BuilderScript.Editor
             });
         }
 
+        [MenuItem("Builds/🤖Build Android")]
+        public static void BuildAndroidApk()
+        {
+            const BuildTarget Platform = Android;
+
+            PredefinePlatformSpecificSettings(Platform);
+
+            var now = DateTime.Now;
+            var culture = new CultureInfo("ru-RU");
+    
+            var buildFileName = $"{now.ToString("dd.MM.yyyy", culture)}_{PlayerSettings.productName}_{now.ToString("hh.mm", culture)}.apk";
+            
+            BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            {
+                locationPathName = $"{GetArtifactsFolderLocation()}/{buildFileName}",
+                scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray(),
+                target = Platform
+            });
+        }
+
         private static string GetArtifactsFolderLocation()
         {
             if(Directory.Exists("../../src"))
