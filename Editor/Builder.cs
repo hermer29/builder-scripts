@@ -21,7 +21,6 @@ namespace BuilderScript.Editor
     
             var buildFolderName = $"{now.ToString("dd.MM.yyyy", culture)}_{PlayerSettings.productName}_{now.ToString("hh.mm", culture)}";
             
-
             BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
                 locationPathName = $"{GetArtifactsFolderLocation()}/{buildFolderName}",
@@ -50,6 +49,13 @@ namespace BuilderScript.Editor
             });
         }
 
+        private static string? GetParameterValue(string parameterName)
+        {
+            var args = Environment.GetCommandLineArgs();
+            return args.FirstOrDefault(x => x.StartsWith($"--{parameterName}="))?
+                .Split($"--{parameterName}=").Last();
+        }
+
         private static string GetArtifactsFolderLocation()
         {
             if(Directory.Exists("../../src"))
@@ -63,6 +69,21 @@ namespace BuilderScript.Editor
         {
             if(target == WebGL)
                 PlayerSettings.colorSpace = ColorSpace.Gamma;
+
+            if(target == Android)
+            {
+                var ndkPath = GetParameterValue("Android_Ndk_Path");
+                if(ndkPath != null)
+                {
+                    EditorPrefs.SetString("AndroidNdkRootR16b", ndkPath);
+                    EditorPrefs.SetString("AndroidNdkRoot", ndkPath);
+                }
+                var sdkPath = GetParameterValue("Android_Sdk_Path");
+                if(sdkPath != null)
+                {
+                    EditorPrefs.SetString("AndroidSdkRoot", sdkPath);
+                }
+            }
         }
     }
 }
