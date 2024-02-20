@@ -79,7 +79,6 @@ namespace BuilderScript.Editor
                     EditorPrefs.SetString("AndroidNdkRootR16b", ndkPath);
                     EditorPrefs.SetString("AndroidNdkRootR19", ndkPath);
                     EditorPrefs.SetString("AndroidNdkRoot", ndkPath);
-                    Editor
                 }
                 var sdkPath = GetParameterValue("Android_Sdk_Path");
                     Debug.Log($"Set into AndroidSdkRoot value: {sdkPath}");
