@@ -75,12 +75,14 @@ namespace BuilderScript.Editor
                 var ndkPath = GetParameterValue("Android_Ndk_Path");
                 if(ndkPath != null)
                 {
+                    Debug.Log($"Set into AndroidNdkRootR16b value: {ndkPath}");
                     EditorPrefs.SetString("AndroidNdkRootR16b", ndkPath);
                     EditorPrefs.SetString("AndroidNdkRoot", ndkPath);
                 }
                 var sdkPath = GetParameterValue("Android_Sdk_Path");
                 if(sdkPath != null)
                 {
+                    Debug.Log($"Set into AndroidSdkRoot value: {sdkPath}");
                     EditorPrefs.SetString("AndroidSdkRoot", sdkPath);
                 }
             }
