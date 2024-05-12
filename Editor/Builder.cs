@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.BuildTarget;
@@ -16,14 +14,14 @@ namespace BuilderScript.Editor
             const BuildTarget Platform = WebGL;
             
             PredefinePlatformSpecificSettings(Platform);
-            var now = DateTime.Now;
-            var culture = new CultureInfo("ru-RU");
-    
-            var buildFolderName = $"{now.ToString("dd.MM.yyyy", culture)}_{PlayerSettings.productName}_{now.ToString("hh.mm", culture)}";
+        
+            EditorPrefs.SetInt("Addressables.BuildAddressablesWithPlayerBuild", 1);
+            
+            var buildFolderPath = CustomCommandLineArgs.GetArgumentValueEnsureNotNull("build-folder-path");
             
             BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
-                locationPathName = $"{GetArtifactsFolderLocation()}/{buildFolderName}",
+                locationPathName = buildFolderPath,
                 scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray(),
                 target = Platform
             });
@@ -36,33 +34,16 @@ namespace BuilderScript.Editor
 
             PredefinePlatformSpecificSettings(Platform);
 
-            var now = DateTime.Now;
-            var culture = new CultureInfo("ru-RU");
-    
-            var buildFileName = $"{now.ToString("dd.MM.yyyy", culture)}_{PlayerSettings.productName}_{now.ToString("hh.mm", culture)}.apk";
-            
+            EditorPrefs.SetInt("Addressables.BuildAddressablesWithPlayerBuild", 1);
+
+            var buildFolderPath = CustomCommandLineArgs.GetArgumentValueEnsureNotNull("build-folder-path");
+
             BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
-                locationPathName = $"{GetArtifactsFolderLocation()}/{buildFileName}",
+                locationPathName = buildFolderPath,
                 scenes = EditorBuildSettings.scenes.Select(x => x.path).ToArray(),
                 target = Platform
             });
-        }
-
-        private static string? GetParameterValue(string parameterName)
-        {
-            var args = Environment.GetCommandLineArgs();
-            return args.FirstOrDefault(x => x.StartsWith($"--{parameterName}="))?
-                .Split($"--{parameterName}=").Last();
-        }
-
-        private static string GetArtifactsFolderLocation()
-        {
-            if(Directory.Exists("../../src"))
-            {
-                return "../../artifacts";
-            }
-            return "./artifacts";
         }
 
         private static void PredefinePlatformSpecificSettings(BuildTarget target)
@@ -72,7 +53,7 @@ namespace BuilderScript.Editor
 
             if(target == Android)
             {
-                var ndkPath = GetParameterValue("Android_Ndk_Path");
+                var ndkPath = CustomCommandLineArgs.GetArgumentValueEnsureNotNull("android-ndk-path");
                     Debug.Log($"Set into AndroidNdkRootR16b value: {ndkPath}");
                 if(ndkPath != null)
                 {
@@ -80,7 +61,7 @@ namespace BuilderScript.Editor
                     EditorPrefs.SetString("AndroidNdkRootR19", ndkPath);
                     EditorPrefs.SetString("AndroidNdkRoot", ndkPath);
                 }
-                var sdkPath = GetParameterValue("Android_Sdk_Path");
+                var sdkPath = CustomCommandLineArgs.GetArgumentValueEnsureNotNull("android-sdk-path");
                     Debug.Log($"Set into AndroidSdkRoot value: {sdkPath}");
                 if(sdkPath != null)
                 {
